@@ -25,3 +25,29 @@ def get_hint(secret_number):
     hints.append(f"The number is between {lower_bound} and {upper_bound}.")
 
     return random.choice(hints)
+
+def save_score(username, score):
+    with open(LEADERBOARD_FILE, "a") as file:
+        file.write(f"{username},{score}\n")
+
+
+def display_leaderboard():
+    if not os.path.exists(LEADERBOARD_FILE):
+        print("\n--- Leaderboard ---")
+        print("No high scores yet! Cement yourself as the Best!")
+        return
+
+    scores = []
+    with open(LEADERBOARD_FILE, "r") as file:
+        for line in file:
+            line = line.strip()
+            if line:
+                name, attempts = line.split(",")
+                scores.append((name, int(attempts)))
+
+    scores.sort(key=lambda x: x[1])
+
+    print("\n --- LEADERBOARD (Top 5) --- ")
+    for rank, (name, attempts) in enumerate(scores[:5], start=1):
+        print(f"{rank}. {name} - {attempts} attempt(s)")
+    print("-------------------------------\n")
