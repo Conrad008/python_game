@@ -51,3 +51,20 @@ def display_leaderboard():
     for rank, (name, attempts) in enumerate(scores[:5], start=1):
         print(f"{rank}. {name} - {attempts} attempt(s)")
     print("-------------------------------\n")
+
+def select_difficulty():
+    levels = {"1": ("Easy", 10), "2": ("Medium", 7), "3": ("Hard", 5)}
+
+    while True:
+        print("\nSelect Difficulty:")
+        print("1. Easy (10 attempts)")
+        print("2. Medium (7 attempts)")
+        print("3. Hard (5 attempts)")
+
+        choice = input("Enter choice (1-3): ").strip()
+        if choice in levels:
+            name, attempts = levels[choice]
+            print(f"\nYou selected {name} mode! You have {attempts} attempts.")
+            return attempts
+        else:
+            print("Invalid selection. Please enter 1, 2, or 3.")    
