@@ -67,4 +67,70 @@ def select_difficulty():
             print(f"\nYou selected {name} mode! You have {attempts} attempts.")
             return attempts
         else:
-            print("Invalid selection. Please enter 1, 2, or 3.")    
+            print("Invalid selection. Please enter 1, 2, or 3.")
+
+def play_game():
+    print(" WELCOME TO THE NUMBER GUESSING GAME! ")
+    print("I'm thinking of a number between 1 and 100.")
+
+    username = input("\nEnter your username: ").strip()
+    if not username:
+        username = "Player"
+
+    max_attempts = select_difficulty()
+    secret_number = random.randint(1, 100)
+    attempts = 0
+    wrong_attempts = 0
+
+    while attempts < max_attempts:
+        remaining = max_attempts - attempts
+        print(f"\nRemaining guesses: {remaining}")
+
+        try:
+            guess = int(
+                input(
+                    f"Attempt {attempts + 1}/{max_attempts} - Guess a number (1-100): "
+                )
+            )
+        except ValueError:
+            print(" Please enter a valid integer.")
+            continue
+
+        if not 1 <= guess <= 100:
+            print(" Out of range! Guess a number between 1 and 100.")
+            continue
+
+        attempts += 1
+
+        if guess == secret_number:
+            print(
+                f"\n Congratulations, {username}! You guessed the number {secret_number} in {attempts} attempt(s)!"
+            )
+            save_score(username, attempts)
+            break
+        elif guess < secret_number:
+            print(" Too Low!")
+            wrong_attempts += 1
+        else:
+            print(" Too High!")
+            wrong_attempts += 1
+
+        # Give a hint after 3 wrong attempts
+        if wrong_attempts == 3 and attempts < max_attempts:
+            print(f"\n HINT: {get_hint(secret_number)}")
+
+    else:
+        print(
+            f"\n Game Over! You ran out of attempts. The secret number was {secret_number}."
+        )
+
+    display_leaderboard()
+
+
+if __name__ == "__main__":
+    while True:
+        play_game()
+        again = input("Do you want to play again? (yes/n0): ").strip().lower()
+        if again != "yes":
+            print("Thanks for playing! Goodbye!")
+            break    
